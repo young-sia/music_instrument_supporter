@@ -7,6 +7,7 @@
 
 * 진행 중인 악기: 기타
 * 현재 업데이트 중인 과정: 기타 운지를 확인하게 모델의 정확도 향상 작업
+* 현재는 파이썬 3.8이지만 차후에 업데이트하면서 변경 가능하게 할 예정
 
 ### 이번 프로젝트에서 프로그램을 실행시키고 시스템을 제작한 파일은 music, instrument, groove2groove 폴더에 존재한다.
 
@@ -63,8 +64,8 @@
        확인할 것: app.py의 33~36번째 줄에서 path 설정을 맞춰서 할 것.
 
 ### 모델 생성 방법
-1. instrument/related_to_data 에 간다. 
-2. 이 위치에 따로 첨부된 raw data를 두고 Trainer_fineTuning.py를 실행시킨다.
+1. instrument/making_model/related_to_data 에 간다. 
+2. 이 위치에 따로 첨부된 raw data를 두고 trainer_finetuning.py를 실행시킨다.
 3. 새로 생성된 guitar_learner.h5를 instrument 폴더로 옮긴 후 실행 방법을 따라서 작동시키면 된다.
 
 

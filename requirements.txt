@@ -7,3 +7,9 @@ pandas
 music21
 numpy
 museflow
+flask
+beautifulsoup4
+sklearn
+pillow
+matplotlib
+seaborn
