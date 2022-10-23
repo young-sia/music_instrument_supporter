@@ -1,0 +1,9 @@
+mediapipe
+opencv-python
+keras
+tensorflow
+scipy
+pandas
+music21
+numpy
+museflow
