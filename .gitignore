@@ -2,3 +2,4 @@ venv
 .idea
 guitar_learner.h5
 /instrument/guitar/making_model/chords
+requirements_library.txt
