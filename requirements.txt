@@ -1,15 +1,4 @@
+tensorflow ==2.7.0
+tensorflow-gpu==2.7.0
 mediapipe
 opencv-python
-keras
-tensorflow
-scipy
-pandas
-music21
-numpy
-museflow
-flask
-beautifulsoup4
-sklearn
-pillow
-matplotlib
-seaborn

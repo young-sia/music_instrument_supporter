@@ -1,6 +1,8 @@
 import cv2
 import os
 import mediapipe as mp
+import tensorflow as tf
+
 
 # 미디어파이프를 활용한 영상 처리 기법
 mp_drawing = mp.solutions.drawing_utils
@@ -57,6 +59,7 @@ def main(c_id):
         # 사진의 용량의 줄이기 위해 res이미지를 모두 grayscale로 변환환
         gray = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
 
+
         # 이미지의 픽셀 값이 25보다 크면 255로 변환, 아니면 0으로 변환
         ret, th1 = cv2.threshold(gray, 25, 255, cv2.THRESH_BINARY)
 
@@ -100,5 +103,12 @@ def main(c_id):
 
 
 if __name__ == '__main__':
+    if tf.test.is_built_with_cuda():
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        print('using GPU')
+    else:
+        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+        print('using CPU instead of GPU')
+
     c_id = input('Enter code: ')
     main(c_id)
