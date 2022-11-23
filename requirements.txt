@@ -4,3 +4,4 @@ mediapipe
 opencv-python
 pandas
 googlenet-pytorch
+scipy
