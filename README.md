@@ -28,7 +28,7 @@
 2. 다른 환경에서 가상환경을 실행하는 법
    * Windows: `.\venv\Scripts\activate`
    * Linux(in Windows), Mac: `source venv/bin/activate`
-3. pip 환경에서 requirments.txt에 있는 패키지 설치: `pip install -r requirments.txt`
+3. pip 환경에서 requirments.txt에 있는 패키지 설치: `pip install -r requirements.txt`
 
 * conda 환경에서 설치할 때
 1. `conda create -n <환경명> python=<버전>`
@@ -40,7 +40,7 @@
    * music를 실행할 환경에서 설치/실행 시킬 것(python 환경:python 3.6.9)
 
        `docker pull mctlab/omnizart:latest`
-   
+
        `docker run -it -p 5000:5000 mctlab/omnizart:latest bash` 
    
        `pip install -r requirements.txt`

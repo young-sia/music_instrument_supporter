@@ -3,3 +3,5 @@ venv
 guitar_learner.h5
 /instrument/guitar/making_model/chords
 requirements_library.txt
+/instrument/guitar/making_model/guitar_learner.h5
+/instrument/guitar/making_model/densenet_cnn_train_model.py
