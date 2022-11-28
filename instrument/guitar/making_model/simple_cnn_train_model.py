@@ -26,9 +26,11 @@ def keras_model(image_x, image_y):
     model.add(Conv2D(64, (5, 5), activation='relu'))
     model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
     model.add(Conv2D(64, (5, 5), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3), padding='same'))
+
+    # 더하면 정확도가 높아짐
+    # model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
+    # model.add(Conv2D(64, (3, 3), activation='relu'))
+
     model.add(Flatten())
     model.add(Dense(1024, activation='relu'))
     # 과적합 방지
