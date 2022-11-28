@@ -1,8 +1,9 @@
 tensorflow
-tensorflow-gpu
+tensorflow-gpu == 2.10.1
 mediapipe
 opencv-python
 pandas
 googlenet-pytorch
 scipy
 numpy
+torchvision

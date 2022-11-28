@@ -6,7 +6,7 @@ from keras.preprocessing.image import ImageDataGenerator
 
 # 이미지 크기
 image_x, image_y = 200, 200
-batch_size = 64
+batch_size = 32
 train_dir = "chords"
 
 
@@ -25,6 +25,10 @@ def keras_model(image_x, image_y):
 
     model.add(Conv2D(64, (5, 5), activation='relu'))
     model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
+    model.add(Conv2D(64, (5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3), padding='same'))
     model.add(Flatten())
     model.add(Dense(1024, activation='relu'))
     # 과적합 방지
@@ -94,7 +98,7 @@ def main():
 
     # batch 단위로 생성된 데이터에 모델 피팅
     # 5번 동안 데이터에 대해 반복 수행, 각 epoch 끈테 검증 생성기로 부터 얻는 단계 숫자
-    model.fit_generator(train_generator, epochs=5, validation_data=validation_generator)
+    model.fit_generator(train_generator, epochs=10, validation_data=validation_generator)
     scores = model.evaluate_generator(generator=validation_generator, steps=64)
     # 모델 평가
     print("CNN Error: %.2f%%" % (100 - scores[1] * 100))

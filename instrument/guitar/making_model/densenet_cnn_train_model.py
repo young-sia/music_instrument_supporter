@@ -5,32 +5,29 @@ from keras.preprocessing.image import ImageDataGenerator
 
 import tensorflow as tf
 
-from keras.applications.resnet_v2 import ResNet152V2
-
-import time
-import datetime
+from torchvision.models import densenet121
 
 # 이미지 크기
 image_x, image_y = 200, 200
-batch_size = 64
+batch_size = 32
 train_dir = "chords"
 
 
 # 케라스 모델 정의
-def resnet_model(image_x, image_y):
+def densenet_model(image_x, image_y):
     # 코드 35개 학습했으므로 읽을 폴더의 갯수 : 35개
     num_of_classes = 35
-    resnet = ResNet152V2(include_top=False, weights='imagenet', input_shape=(image_x, image_y, 3))
+    densenet = densenet121(include_top=False, weights='imagenet', input_shape=(image_x, image_y, 3))
 
-    # resnet을 사용해서 모델 생성
-    resnet.trainable = True
-    for i in resnet.layers[:528]:
+    # densenet을 사용해서 모델 생성
+    densenet.trainable = True
+    for i in densenet.layers[:528]:
         i.trainable = False
 
-    for i in resnet.layers[525:]:
+    for i in densenet.layers[525:]:
         print(i.name, i.trainable)
 
-    x = resnet.output
+    x = densenet.output
     x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Flatten()(x)
     x = Dropout(0.5)(x)
@@ -40,7 +37,7 @@ def resnet_model(image_x, image_y):
     x = BatchNormalization()(x)
     x = Dense(num_of_classes, activation='softmax')(x)
 
-    model = tf.keras.Model(inputs=resnet.input, outputs=x)
+    model = tf.keras.Model(inputs=densenet.input, outputs=x)
 
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
@@ -52,8 +49,6 @@ def resnet_model(image_x, image_y):
 
 
 def main():
-    # 걸린 시간 측정
-    start = time.time()
     # 적은 양의 데이터를 가지고 이미지 분류 모델 구축을 위해 실시간 이미지 증가(agumentation)
     train_datagen = ImageDataGenerator(
         # RGB영상의 계수로 구성된 원본 영상을 모델에 효과적으로 학습 시키기 위해 1/255로 스케일링하여 0-1 범위로 변환
@@ -100,19 +95,13 @@ def main():
 
     # batch 단위로 생성된 데이터에 모델 피팅
     # 5번 동안 데이터에 대해 반복 수행, 각 epoch 끈테 검증 생성기로 부터 얻는 단계 숫자
-    model, callbacks_list = resnet_model(image_x, image_y)
-    model.fit(train_generator, epochs=10, validation_data=validation_generator)
+    model, callbacks_list = densenet_model(image_x, image_y)
+    model.fit(train_generator, epochs=5, validation_data=validation_generator)
     scores = model.evaluate_generator(generator=validation_generator, steps=64)
     # 모델 평가
     print("CNN Error: %.2f%%" % (100 - scores[1] * 100))
     # 모델 저장
     model.save('resnet_guitar_learner.h5')
-
-    # 걸린 시간 측정
-    end = time.time()
-    sec = (end - start)
-    time_check_list = str(datetime.timedelta(seconds=sec)).split(".")
-    print(time_check_list[0])
 
 
 if __name__ == '__main__':
