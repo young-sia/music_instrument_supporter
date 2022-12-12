@@ -4,3 +4,10 @@ guitar_learner.h5
 /instrument/guitar/making_model/chords
 requirements_library.txt
 /instrument/guitar/making_model/guitar_learner.h5
+/instrument/guitar/making_model/vgg16_guitar_learner.h5
+/instrument/guitar/making_model/vgg19_guitar_learner.h5
+/instrument/guitar/making_model/vgg16_guitar_model.py
+/instrument/guitar/making_model/resnet_guitar_learner.h5
+/instrument/guitar/making_model/simple_cnn_guitar_learner.h5
+/instrument/guitar/making_model/densenet_guitar_learner.h5
+/instrument/guitar/making_model/google_net_cnn_train_model.py

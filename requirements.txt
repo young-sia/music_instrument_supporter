@@ -6,4 +6,3 @@ pandas
 googlenet-pytorch
 scipy
 numpy
-torchvision

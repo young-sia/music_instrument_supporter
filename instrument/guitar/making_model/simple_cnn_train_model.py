@@ -4,31 +4,41 @@ from keras.layers import MaxPooling2D, Dropout
 from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 
+import time
+import datetime
+
+
 # 이미지 크기
-image_x, image_y = 200, 200
+image_x, image_y = 100, 100
 batch_size = 32
+epochs = 20
 train_dir = "chords"
+
+# 기타 제약
+filter1 = 32
+filter2 = 64
+filter3 = 64
 
 
 # 케라스 모델 정의
 def keras_model(image_x, image_y):
-    # 코드 7개 학습했으므로 읽을 폴더의 갯수 : 7개
+    # 코드 35개 학습했으므로 읽을 폴더의 갯수 : 35개
     num_of_classes = 35
     # 순차적으로 레이어 층을 더해주는 순차 모델 사용
     model = Sequential()
     # 딥러닝 네트워크에서 노드에 입력된 값들을 비선형 함수에 통과 시킨수 다음 레이어로 전달하는 활성화 함수를
     # 가장 많이 사용되는 relu를 사용한다.
-    model.add(Conv2D(32, (5, 5), input_shape=(image_x, image_y, 1), activation='relu'))
+    model.add(Conv2D(filter1, (5, 5), input_shape=(image_x, image_y, 1), activation='relu'))
     # 공간적 데이터에 대한 최대값 풀링 작업
     #  인풋을 두 공간에 차원에 대해 반으로 축소
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same'))
 
-    model.add(Conv2D(64, (5, 5), activation='relu'))
+    model.add(Conv2D(filter2, (5, 5), activation='relu'))
     model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
-    model.add(Conv2D(64, (5, 5), activation='relu'))
-
-    # 더하면 정확도가 높아짐
-    # model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
+    model.add(Conv2D(filter3, (5, 5), activation='relu'))
+    #
+    # # 더하면 정확도가 높아짐
+    model.add(MaxPooling2D(pool_size=(5, 5), strides=(5, 5), padding='same'))
     # model.add(Conv2D(64, (3, 3), activation='relu'))
 
     model.add(Flatten())
@@ -51,30 +61,36 @@ def keras_model(image_x, image_y):
 
 
 def main():
-    # 적은 양의 데이터를 가지고 이미지 분류 모델 구축을 위해 실시간 이미지 증가(agumentation)
+    # 걸린 시간 측정 시작
+    start = time.time()
+
+    print("Batch Size: ", batch_size, ", Epochs: ", epochs)
+    print("filters(1,2,3): ", filter1, filter2, filter3)
+    # 적은 양의 데이터를 가지고 이미지 분류 모델 구축을 위해 실시간 이미지 증가(agumentation)-안하는중
     train_datagen = ImageDataGenerator(
         # RGB영상의 계수로 구성된 원본 영상을 모델에 효과적으로 학습 시키기 위해 1/255로 스케일링하여 0-1 범위로 변환
         rescale=1. / 255,
-        # 이미지를 수평, 수직으로 랜덤하게 평행 이동 시키는 범위 지정
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        # 임의 전단 변환 범위
-        shear_range=0.2,
-        # 이미지 회전 범위
-        rotation_range=15,
-        # 임의 확대, 축소 범위
-        zoom_range=0.2,
-        # 이미지 좌우반전 x
-        horizontal_flip=False,
+        # # 이미지를 수평, 수직으로 랜덤하게 평행 이동 시키는 범위 지정
+        # width_shift_range=0.2,
+        # height_shift_range=0.2,
+        # # 임의 전단 변환 범위
+        # shear_range=0.2,
+        # # 이미지 회전 범위
+        # rotation_range=15,
+        # # 임의 확대, 축소 범위
+        # zoom_range=0.2,
+        # # 이미지 좌우반전 x
+        # horizontal_flip=False,
         # 학습 사 데이터 일부를 나눠거 validation으로 사용할 비율
         validation_split=0.2,
-        # fill_mode는 디폴트 값 사용
-        fill_mode='nearest')
+        # # fill_mode는 디폴트 값 사용
+        # fill_mode='nearest'
+        )
 
     # 디렉토리 설정
     train_generator = train_datagen.flow_from_directory(
         train_dir,
-        # 추후 모델에 들어갈 인풋 이미지 사이즈(200,200)
+        # 추후 모델에 들어갈 인풋 이미지 사이즈(100,100)
         target_size=(image_x, image_y),
         # 그레이 스케일 사용
         color_mode="grayscale",
@@ -100,13 +116,19 @@ def main():
 
     # batch 단위로 생성된 데이터에 모델 피팅
     # 5번 동안 데이터에 대해 반복 수행, 각 epoch 끈테 검증 생성기로 부터 얻는 단계 숫자
-    model.fit_generator(train_generator, epochs=10, validation_data=validation_generator)
+    model.fit_generator(train_generator, epochs=epochs, validation_data=validation_generator)
     scores = model.evaluate_generator(generator=validation_generator, steps=64)
     # 모델 평가
     print("CNN Error: %.2f%%" % (100 - scores[1] * 100))
 
     # 모델 저장
-    model.save('guitar_learner.h5')
+    model.save('simple_cnn_guitar_learner.h5')
+
+    # 걸린 시간 측정
+    end = time.time()
+    sec = (end - start)
+    time_check_list = str(datetime.timedelta(seconds=sec)).split(".")
+    print(time_check_list[0])
 
 
 if __name__ == '__main__':
